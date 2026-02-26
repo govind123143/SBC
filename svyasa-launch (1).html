@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Svyasa Blockchain Club</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   CURTAIN REVEAL — Club Launch Day
+═══════════════════════════════════════════ */
+#curtain-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: all;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Left & Right curtain panels */
+.curtain-panel {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background: #0b0f1a;
+  z-index: 9999;
+  transition: transform 1.8s cubic-bezier(0.77, 0, 0.175, 1);
+  overflow: hidden;
+}
+.curtain-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 30px,
+      rgba(245,158,11,0.04) 30px,
+      rgba(245,158,11,0.04) 31px
+    );
+  pointer-events: none;
+}
+/* Velvet fold lines */
+.curtain-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    rgba(0,0,0,0.25) 8px,
+    transparent 16px,
+    rgba(255,255,255,0.015) 20px,
+    transparent 28px
+  );
+}
+.curtain-left {
+  left: 0;
+  background: linear-gradient(105deg, #0d1120 0%, #0b0f1a 60%, #111827 100%);
+  border-right: 2px solid rgba(245,158,11,0.25);
+  box-shadow: inset -40px 0 80px rgba(0,0,0,0.5), 4px 0 30px rgba(245,158,11,0.08);
+}
+.curtain-right {
+  right: 0;
+  background: linear-gradient(255deg, #0d1120 0%, #0b0f1a 60%, #111827 100%);
+  border-left: 2px solid rgba(245,158,11,0.25);
+  box-shadow: inset 40px 0 80px rgba(0,0,0,0.5), -4px 0 30px rgba(245,158,11,0.08);
+}
+
+/* Gold rope/trim along the curtain edge */
+.curtain-left .curtain-trim {
+  position: absolute;
+  right: -1px;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: linear-gradient(180deg, #d97706, #f59e0b, #fbbf24, #f59e0b, #d97706);
+  box-shadow: 0 0 20px rgba(245,158,11,0.6);
+  z-index: 2;
+}
+.curtain-right .curtain-trim {
+  position: absolute;
+  left: -1px;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: linear-gradient(180deg, #d97706, #f59e0b, #fbbf24, #f59e0b, #d97706);
+  box-shadow: 0 0 20px rgba(245,158,11,0.6);
+  z-index: 2;
+}
+
+/* ── Open state ── */
+.curtain-panel.open.curtain-left  { transform: translateX(-100%); }
+.curtain-panel.open.curtain-right { transform: translateX(100%); }
+
+/* ── Center stage logo ── */
+#curtain-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+.curtain-logo-hex {
+  width: 140px;
+  height: 140px;
+  clip-path: polygon(50% 0%,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);
+  background: #f59e0b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 4rem;
+  font-weight: 900;
+  color: #0b0f1a;
+  animation: curtain-hex-pulse 2s ease-in-out infinite, curtain-hex-glow 2s ease-in-out infinite;
+  margin-bottom: 28px;
+  position: relative;
+}
+.curtain-logo-hex::before {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  clip-path: polygon(50% 0%,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);
+  background: rgba(245,158,11,0.15);
+  animation: curtain-ring-pulse 2s ease-in-out infinite;
+}
+@keyframes curtain-hex-pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+@keyframes curtain-hex-glow {
+  0%,100% { filter: drop-shadow(0 0 20px rgba(245,158,11,0.4)); }
+  50% { filter: drop-shadow(0 0 50px rgba(245,158,11,0.9)); }
+}
+@keyframes curtain-ring-pulse {
+  0%,100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+.curtain-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -1px;
+  text-align: center;
+  line-height: 1.1;
+  text-shadow: 0 4px 30px rgba(0,0,0,0.8);
+}
+.curtain-title em {
+  font-style: italic;
+  color: #f59e0b;
+}
+.curtain-subtitle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(245,158,11,0.7);
+  margin-top: 12px;
+  text-align: center;
+}
+.curtain-launch-btn {
+  margin-top: 48px;
+  background: #f59e0b;
+  color: #0b0f1a;
+  border: none;
+  padding: 16px 48px;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  pointer-events: all;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s;
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  animation: curtain-btn-pulse 2.5s ease-in-out infinite;
+}
+.curtain-launch-btn:hover {
+  background: #fbbf24;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(245,158,11,0.5);
+  animation: none;
+}
+.curtain-launch-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+.curtain-launch-btn:hover::before {
+  transform: translateX(100%);
+}
+@keyframes curtain-btn-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(245,158,11,0.4); }
+  50% { box-shadow: 0 0 0 16px rgba(245,158,11,0); }
+}
+.curtain-btn-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.curtain-btn-label::before {
+  content: '◆';
+  font-size: 0.5rem;
+  animation: curtain-diamond-spin 3s linear infinite;
+}
+.curtain-btn-label::after {
+  content: '◆';
+  font-size: 0.5rem;
+  animation: curtain-diamond-spin 3s linear infinite reverse;
+}
+@keyframes curtain-diamond-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Particle dots on curtain */
+.curtain-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.c-particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(245,158,11,0.6);
+  border-radius: 50%;
+  animation: c-float linear infinite;
+}
+@keyframes c-float {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-20px) scale(1); opacity: 0; }
+}
+
+/* Top decorative bar */
+.curtain-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #d97706, #f59e0b, #fbbf24, #f59e0b, #d97706);
+  z-index: 10001;
+  box-shadow: 0 0 20px rgba(245,158,11,0.8);
+}
+
+/* Fade out the whole curtain wrapper after open */
+#curtain-wrapper.done {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease 0.4s;
+}
+</style>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0b0f1a;--navy-m:#111827;--navy-l:#1a2235;
+  --amber:#f59e0b;--amber-l:#fbbf24;--amber-d:#d97706;
+  --ghost:#f0f2f5;
+  --bg:#f2f4f8;--surface:#fff;--text:#0b0f1a;--text-m:#4a5568;
+  --card-bg:#fff;--card-b:#e2e8f0;--nav-bg:#0b0f1a;
+  --stat-bg:#0b0f1a;--focus-bg:#f2f4f8;--evt-bg:#fff;--mem-bg:#f2f4f8;
+  --muted:#6b7a99;
+}
+body.dark{
+  --bg:#07080f;--surface:#0d1020;--text:#e8edf5;--text-m:#8896b0;
+  --card-bg:#0f1525;--card-b:#1e2d47;--focus-bg:#07080f;--evt-bg:#0d1020;--mem-bg:#07080f;--muted:#5a6a85;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);font-family:'Syne',sans-serif;color:var(--text);min-height:100vh;transition:background .35s,color .35s;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--navy)}::-webkit-scrollbar-thumb{background:var(--amber);border-radius:2px}
+
+/* NAV */
+nav{background:var(--nav-bg);border-bottom:1px solid rgba(245,158,11,.15);display:flex;align-items:center;justify-content:space-between;padding:0 60px;height:64px;position:sticky;top:0;z-index:200;transition:background .35s}
+nav::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--amber)}
+.nav-logo{display:flex;align-items:center;gap:10px;font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:#fff;text-decoration:none}
+.nav-logo-mark{width:30px;height:30px;background:var(--amber);clip-path:polygon(50% 0%,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.9rem;font-weight:900;color:var(--navy)}
+.nav-links{display:flex;gap:40px;list-style:none}
+.nav-links a{text-decoration:none;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(240,242,245,.5);transition:color .2s}
+.nav-links a:hover{color:var(--amber)}
+.nav-cta{background:var(--amber)!important;color:var(--navy)!important;padding:7px 18px!important;transition:background .2s!important}
+.nav-cta:hover{background:var(--amber-l)!important}
+.toggle-wrap{display:flex;align-items:center;gap:8px}
+.dark-toggle{background:none;border:1.5px solid rgba(245,158,11,.4);width:44px;height:24px;border-radius:12px;cursor:pointer;position:relative}
+.dark-toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--amber);transition:transform .3s}
+body.dark .dark-toggle::after{transform:translateX(20px)}
+#toggle-icon{font-size:.75rem}
+
+/* TICKER */
+.ticker{background:var(--amber);overflow:hidden;padding:9px 0;white-space:nowrap;border-bottom:1px solid var(--amber-d)}
+.ticker-inner{display:inline-block;animation:ticker-move 28s linear infinite;font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--navy)}
+.ticker-inner span{margin:0 24px}
+.ticker-inner .sep{opacity:.4}
+@keyframes ticker-move{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:1.1fr 0.9fr;min-height:580px}
+.hero-left{background:var(--surface);padding:80px 64px 80px 60px;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--card-b);position:relative;overflow:hidden;transition:background .35s,border-color .35s}
+.hero-left::before{content:'';position:absolute;left:0;top:15%;bottom:15%;width:3px;background:var(--amber)}
+.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:var(--amber);margin-bottom:24px;display:flex;align-items:center;gap:10px;animation:fadeUp .5s ease both}
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--amber)}
+.hero-left h1{font-family:'Playfair Display',serif;font-size:clamp(3rem,5.5vw,5.8rem);font-weight:900;line-height:.95;letter-spacing:-2px;color:var(--text);margin-bottom:28px;animation:fadeUp .55s .1s ease both}
+.hero-left h1 em{font-style:italic;color:var(--amber);display:block}
+.hero-left p{font-size:.88rem;line-height:1.85;color:var(--text-m);max-width:400px;margin-bottom:44px;animation:fadeUp .55s .2s ease both}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;animation:fadeUp .55s .3s ease both}
+.btn-primary{background:var(--amber);color:var(--navy);border:2px solid var(--amber);padding:13px 32px;font-family:'Syne',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:all .2s;display:inline-block}
+.btn-primary:hover{background:var(--amber-l);border-color:var(--amber-l);transform:translateY(-2px);box-shadow:0 8px 24px rgba(245,158,11,.35)}
+.btn-secondary{background:transparent;border:2px solid var(--card-b);color:var(--text);padding:13px 32px;font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:all .2s;display:inline-block}
+.btn-secondary:hover{border-color:var(--amber);color:var(--amber)}
+.hero-right{background:var(--navy);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.hero-right::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(245,158,11,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(245,158,11,.05) 1px,transparent 1px);background-size:40px 40px}
+.bc-art{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.bc-art svg{width:100%;height:100%;position:absolute;top:0;left:0}
+.ha-corner{position:absolute;width:48px;height:48px}
+.ha-corner.tl{top:0;left:0;border-top:2px solid var(--amber);border-left:2px solid var(--amber)}
+.ha-corner.tr{top:0;right:0;border-top:2px solid var(--amber);border-right:2px solid var(--amber)}
+.ha-corner.bl{bottom:0;left:0;border-bottom:2px solid var(--amber);border-left:2px solid var(--amber)}
+.ha-corner.br{bottom:0;right:0;border-bottom:2px solid var(--amber);border-right:2px solid var(--amber)}
+.hex-mark{text-align:center;animation:fadeUp .7s .2s ease both;position:relative;z-index:3}
+.hex-outer{width:230px;height:230px;clip-path:polygon(50% 0%,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);background:transparent;border:2px solid rgba(245,158,11,.35);display:flex;align-items:center;justify-content:center;margin:0 auto 22px;position:relative;animation:pulse-hex 4s ease-in-out infinite}
+@keyframes pulse-hex{0%,100%{filter:drop-shadow(0 0 8px rgba(245,158,11,.15))}50%{filter:drop-shadow(0 0 28px rgba(245,158,11,.45))}}
+.hex-mid{width:170px;height:170px;clip-path:polygon(50% 0%,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);background:rgba(245,158,11,.07);border:1.5px solid rgba(245,158,11,.22);display:flex;align-items:center;justify-content:center}
+.hex-core{width:110px;height:110px;background:var(--amber);clip-path:polygon(50% 0%,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);display:flex;align-items:center;justify-content:center}
+.hex-s{font-family:'Playfair Display',serif;font-size:3.4rem;font-weight:900;color:var(--navy);line-height:1}
+.hex-mark-name{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--ghost)}
+.hex-mark-sub{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);margin-top:6px}
+
+/* STATS */
+.stats-bar{background:var(--stat-bg);display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(245,158,11,.15);border-bottom:1px solid rgba(245,158,11,.15)}
+.stat{padding:44px 24px;text-align:center;border-right:1px solid rgba(245,158,11,.12);position:relative}
+.stat:last-child{border-right:none}
+.stat::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:32px;height:2px;background:var(--amber)}
+.stat-num{font-family:'Playfair Display',serif;font-size:3.6rem;font-weight:900;line-height:1;color:var(--amber);letter-spacing:-2px}
+.stat-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+
+/* CHAIN DIVIDER */
+.chain-divider{background:var(--navy);overflow:hidden;padding:40px 0;border-top:1px solid rgba(245,158,11,.12);border-bottom:1px solid rgba(245,158,11,.12);position:relative}
+.chain-divider-inner{display:flex;align-items:center;gap:0;animation:chain-scroll 20s linear infinite;width:max-content}
+@keyframes chain-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.chain-block{display:flex;flex-direction:column;align-items:center;margin:0 4px;flex-shrink:0}
+.chain-box{width:72px;height:52px;border:1.5px solid rgba(245,158,11,.35);background:rgba(245,158,11,.04);display:flex;align-items:center;justify-content:center;position:relative;font-family:'JetBrains Mono',monospace;font-size:.44rem;color:rgba(245,158,11,.5);letter-spacing:.05em;text-align:center;padding:4px;line-height:1.4}
+.chain-box::before{content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:6px;height:6px;background:var(--amber);border-radius:50%}
+.chain-conn{width:32px;height:1.5px;background:linear-gradient(90deg,rgba(245,158,11,.5),rgba(245,158,11,.15));align-self:center;flex-shrink:0;margin-bottom:12px}
+.chain-hash{font-family:'JetBrains Mono',monospace;font-size:.36rem;color:rgba(245,158,11,.28);letter-spacing:.04em;margin-top:4px}
+
+/* SECTIONS */
+.section{padding:88px 60px}
+.section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);margin-bottom:12px;display:flex;align-items:center;gap:12px}
+.section-eyebrow::before{content:'';width:28px;height:1px;background:var(--amber);flex-shrink:0}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,4vw,3.2rem);font-weight:900;line-height:1.05;letter-spacing:-1.5px;color:var(--text);margin-bottom:16px}
+.section-subtitle{font-size:.84rem;color:var(--text-m);max-width:520px;line-height:1.8;margin-bottom:56px}
+
+/* ═══ PATHWAY CARDS — 3 per row, floating shadow ═══ */
+.focus-section{background:var(--focus-bg);transition:background .35s}
+
+.pathway-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+
+.pathway-card{
+  background:var(--card-bg);
+  border-radius:16px;
+  overflow:hidden;
+  /* Deep layered shadow system */
+  box-shadow:
+    0 1px 2px rgba(0,0,0,.05),
+    0 4px 8px rgba(11,15,26,.08),
+    0 12px 28px rgba(11,15,26,.10),
+    0 32px 64px rgba(11,15,26,.07);
+  cursor:pointer;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s;
+  position:relative;
+}
+.pathway-card:hover{
+  transform:translateY(-12px) scale(1.01);
+  box-shadow:
+    0 2px 4px rgba(0,0,0,.05),
+    0 8px 20px rgba(11,15,26,.12),
+    0 24px 56px rgba(11,15,26,.16),
+    0 48px 96px rgba(11,15,26,.10),
+    0 0 0 1.5px rgba(245,158,11,.25);
+}
+/* Shimmer sweep on hover */
+.pathway-card::before{
+  content:'';position:absolute;inset:0;z-index:10;pointer-events:none;border-radius:16px;
+  background:linear-gradient(135deg,transparent 30%,rgba(255,255,255,.035) 50%,transparent 70%);
+  transform:translateX(-100%);transition:transform .7s;
+}
+.pathway-card:hover::before{transform:translateX(100%)}
+/* Amber bottom line reveal */
+.pathway-card::after{
+  content:'';position:absolute;left:20px;bottom:0;right:20px;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,var(--amber),var(--amber-l));
+  transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.16,1,.3,1);
+}
+.pathway-card:hover::after{transform:scaleX(1)}
+
+.pc-label{
+  background:var(--navy);color:var(--amber);
+  font-family:'JetBrains Mono',monospace;font-size:.56rem;
+  font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  padding:10px 20px;display:flex;align-items:center;justify-content:space-between;
+}
+.pc-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);animation:ping 2.4s ease-in-out infinite}
+@keyframes ping{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.5)}50%{box-shadow:0 0 0 5px rgba(245,158,11,0)}}
+
+.pc-icon-wrap{
+  height:190px;display:flex;align-items:center;justify-content:center;
+  font-size:3.2rem;position:relative;overflow:hidden;
+}
+.pc-art{position:absolute;inset:0;pointer-events:none}
+.pc-emoji{position:relative;z-index:2;filter:drop-shadow(0 4px 16px rgba(0,0,0,.4))}
+.pc-body{padding:22px 22px 8px}
+.pc-category{font-family:'JetBrains Mono',monospace;font-size:.52rem;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin-bottom:6px}
+.pc-title{font-size:1rem;font-weight:800;color:var(--text);letter-spacing:-.3px;line-height:1.3;margin-bottom:10px;transition:color .35s}
+.pc-desc{padding:0 22px 24px;font-size:.73rem;color:var(--text-m);line-height:1.8;transition:color .35s}
+
+/* ═══ EVENTS ═══ */
+.events-section{background:var(--evt-bg);border-top:1px solid var(--card-b);border-bottom:1px solid var(--card-b);transition:background .35s,border-color .35s}
+.events-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--card-b);border:1px solid var(--card-b)}
+.event-item{background:var(--surface);padding:32px 28px;display:flex;gap:24px;align-items:flex-start;cursor:pointer;transition:background .22s;position:relative;overflow:hidden}
+.event-item::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--amber);transform:scaleY(0);transform-origin:bottom;transition:transform .3s}
+.event-item:hover::after{transform:scaleY(1)}
+.event-item:hover{background:var(--navy)}
+.event-item:hover .ev-day,.event-item:hover .event-info h3{color:var(--amber)}
+.event-item:hover .ev-month,.event-item:hover .event-info p{color:rgba(240,242,245,.6)}
+.event-item:hover .event-tag{border-color:rgba(245,158,11,.4);color:var(--amber)}
+.event-date{text-align:center;min-width:56px}
+.ev-day{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:900;line-height:1;color:var(--amber);transition:color .22s;letter-spacing:-1px}
+.ev-month{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-m);font-weight:500;transition:color .22s}
+.event-info h3{font-size:.9rem;font-weight:700;color:var(--text);margin-bottom:7px;line-height:1.4;transition:color .22s}
+.event-info p{font-size:.74rem;color:var(--text-m);line-height:1.7;transition:color .22s}
+.event-tag{display:inline-block;border:1px solid var(--card-b);color:var(--text-m);font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;margin-top:14px;transition:all .22s}
+
+/* ═══ BLOCKCHAIN ART BAND ═══ */
+.bc-band{
+  background:var(--navy);padding:72px 60px;
+  position:relative;overflow:hidden;
+  border-top:1px solid rgba(245,158,11,.12);
+  border-bottom:1px solid rgba(245,158,11,.12);
+  display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;
+}
+.bc-band::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(245,158,11,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(245,158,11,.04) 1px,transparent 1px);background-size:40px 40px;pointer-events:none}
+.bc-band-text{position:relative;z-index:2}
+.bc-band-eyebrow{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.bc-band-eyebrow::before{content:'';width:20px;height:1px;background:var(--amber)}
+.bc-band-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,2.6rem);font-weight:900;color:#fff;line-height:1.1;letter-spacing:-1px;margin-bottom:16px}
+.bc-band-title em{font-style:italic;color:var(--amber)}
+.bc-band-desc{font-size:.82rem;color:rgba(240,242,245,.55);line-height:1.8;max-width:380px}
+.bc-band-svg{position:relative;z-index:2;height:260px}
+
+/* ═══ MEMBER CARDS — 3 per row, deep shadows ═══ */
+.members-section{background:var(--mem-bg);transition:background .35s}
+
+.members-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+
+.member-card{
+  background:var(--card-bg);
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:
+    0 1px 3px rgba(0,0,0,.05),
+    0 4px 12px rgba(11,15,26,.09),
+    0 16px 40px rgba(11,15,26,.10),
+    0 40px 80px rgba(11,15,26,.06);
+  cursor:pointer;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s;
+  position:relative;
+}
+.member-card:hover{
+  transform:translateY(-12px);
+  box-shadow:
+    0 2px 6px rgba(0,0,0,.07),
+    0 10px 24px rgba(11,15,26,.14),
+    0 28px 60px rgba(11,15,26,.18),
+    0 0 0 2px var(--amber),
+    0 0 40px rgba(245,158,11,.06);
+}
+
+.m-avatar{
+  width:100%;height:180px;
+  display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
+}
+.m-avatar-noise{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(0,0,0,.12) 1px,transparent 1px);background-size:10px 10px;z-index:1}
+.m-avatar-fade{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.4) 0%,transparent 55%);z-index:2}
+.m-avatar-art{position:absolute;inset:0;z-index:0;opacity:.2}
+.m-initials{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:900;font-style:italic;color:#fff;position:relative;z-index:3;text-shadow:0 3px 16px rgba(0,0,0,.4)}
+.m-badge{position:absolute;top:14px;right:14px;background:var(--amber);color:var(--navy);font-family:'JetBrains Mono',monospace;font-size:.46rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;z-index:4;box-shadow:0 2px 8px rgba(0,0,0,.25);border-radius:2px}
+.m-info{padding:20px 22px 22px;border-top:1px solid var(--card-b);background:var(--card-bg);transition:background .35s,border-color .35s}
+.m-name{font-size:.95rem;font-weight:800;color:var(--text);margin-bottom:3px;letter-spacing:-.2px;transition:color .35s}
+.m-role{font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:13px;transition:color .35s}
+.m-tags{display:flex;flex-wrap:wrap;gap:5px}
+.m-tag{background:rgba(245,158,11,.09);border:1px solid rgba(245,158,11,.28);color:var(--amber-d);font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;transition:background .2s;border-radius:2px}
+.m-tag:hover{background:rgba(245,158,11,.2)}
+.m-tag.alt{background:rgba(11,15,26,.05);border-color:rgba(11,15,26,.15);color:var(--text-m)}
+body.dark .m-tag.alt{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:var(--muted)}
+.av-a{background:linear-gradient(140deg,#0b0f1a,#1d2b45)}
+.av-b{background:linear-gradient(140deg,#c2600a,#f59e0b)}
+.av-c{background:linear-gradient(140deg,#1a2235,#0b0f1a)}
+.av-d{background:linear-gradient(140deg,#e09000,#fbbf24)}
+.av-e{background:linear-gradient(140deg,#0f1e3d,#1a3560)}
+.av-f{background:linear-gradient(140deg,#5b21b6,#7c3aed)}
+
+/* JOIN */
+.join-section{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--card-b)}
+.join-left{background:var(--amber);padding:80px 60px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.join-left::before{content:'S';position:absolute;right:-50px;bottom:-80px;font-family:'Playfair Display',serif;font-size:22rem;font-weight:900;color:rgba(11,15,26,.06);line-height:1;pointer-events:none}
+.join-eyebrow{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(11,15,26,.55);margin-bottom:16px}
+.join-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:900;line-height:1.05;letter-spacing:-1.5px;color:var(--navy);margin-bottom:20px}
+.join-title em{font-style:italic}
+.join-desc{font-size:.85rem;color:rgba(11,15,26,.7);line-height:1.85;max-width:380px;margin-bottom:40px}
+.btn-join{background:var(--navy);color:var(--amber);border:2px solid var(--navy);padding:13px 32px;font-family:'Syne',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;display:inline-block;width:fit-content;transition:all .2s}
+.btn-join:hover{background:transparent;color:var(--navy);transform:translateY(-2px)}
+.join-right{background:var(--navy);padding:80px 60px;display:flex;flex-direction:column;justify-content:center;gap:28px;border-left:1px solid rgba(245,158,11,.12);position:relative;overflow:hidden}
+.join-right::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(245,158,11,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(245,158,11,.04) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
+.join-item{display:flex;gap:18px;align-items:flex-start;position:relative;z-index:1}
+.join-icon{width:38px;height:38px;border:1px solid rgba(245,158,11,.2);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;background:rgba(245,158,11,.05)}
+.join-item-title{font-size:.88rem;font-weight:700;color:var(--ghost);margin-bottom:5px}
+.join-item-desc{font-size:.72rem;color:rgba(240,242,245,.45);line-height:1.65}
+
+/* FOOTER */
+footer{background:var(--navy);border-top:1px solid rgba(245,158,11,.15);padding:52px 60px;display:flex;justify-content:space-between;align-items:flex-end;position:relative}
+footer::before{content:'';position:absolute;top:0;left:60px;right:60px;height:1px;background:linear-gradient(90deg,var(--amber),transparent)}
+.footer-brand{display:flex;flex-direction:column;gap:8px}
+.footer-logo{display:flex;align-items:center;gap:10px;font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--ghost)}
+.footer-logo-mark{width:28px;height:28px;background:var(--amber);clip-path:polygon(50% 0%,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.8rem;font-weight:900;color:var(--navy)}
+.footer-sub{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;color:rgba(245,158,11,.5)}
+.footer-links{display:flex;gap:28px;list-style:none}
+.footer-links a{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(240,242,245,.35);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--amber)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:none}
+
+@media(max-width:1100px){.pathway-grid{grid-template-columns:repeat(2,1fr)}.members-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){
+  nav{padding:0 20px}.nav-links{display:none}
+  .hero{grid-template-columns:1fr}.hero-right{min-height:320px}.hero-left{padding:56px 24px}
+  .section{padding:56px 24px}.stats-bar{grid-template-columns:repeat(2,1fr)}
+  .events-grid{grid-template-columns:1fr}.join-section{grid-template-columns:1fr}
+  .pathway-grid{grid-template-columns:1fr}.members-grid{grid-template-columns:1fr}
+  .bc-band{grid-template-columns:1fr}
+  footer{flex-direction:column;gap:28px;align-items:flex-start;padding:40px 24px}
+  footer::before{left:24px;right:24px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ CURTAIN REVEAL ═══════════ -->
+<div id="curtain-wrapper">
+  <div class="curtain-topbar"></div>
+
+  <!-- Left Panel -->
+  <div class="curtain-panel curtain-left">
+    <div class="curtain-trim"></div>
+    <div class="curtain-particles" id="left-particles"></div>
+  </div>
+
+  <!-- Right Panel -->
+  <div class="curtain-panel curtain-right">
+    <div class="curtain-trim"></div>
+    <div class="curtain-particles" id="right-particles"></div>
+  </div>
+
+  <!-- Center Stage -->
+  <div id="curtain-stage">
+    <div class="curtain-logo-hex">S</div>
+    <div class="curtain-title">Svyasa<br><em>Blockchain Club</em></div>
+    
+    <button class="curtain-launch-btn" id="launchBtn" onclick="openCurtains()">
+      <span class="curtain-btn-label">Launch Website</span>
+    </button>
+  </div>
+</div>
+<!-- ════════════════════════════════════ -->
+
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="nav-logo-mark">S</div>
+    Svyasa Blockchain club
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#focus">Focus Areas</a></li>
+    <li><a href="#events">Events</a></li>
+    <li><a href="#members">Members</a></li>
+    <li><a href="#join" class="nav-cta">Join Club</a></li>
+  </ul>
+  <div class="toggle-wrap">
+    <span id="toggle-icon">☀️</span>
+    <button class="dark-toggle" id="darkToggle" aria-label="Toggle dark mode"></button>
+  </div>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span>Web3 Research</span><span class="sep">///</span><span>DeFi Protocols</span><span class="sep">///</span>
+    <span>Smart Contracts</span><span class="sep">///</span><span>NFT Ecosystem</span><span class="sep">///</span>
+    <span>Layer 2 Solutions</span><span class="sep">///</span><span>Blockchain Dev</span><span class="sep">///</span>
+    <span>Cryptography</span><span class="sep">///</span><span>DAO Governance</span><span class="sep">///</span>
+    <span>Web3 Research</span><span class="sep">///</span><span>DeFi Protocols</span><span class="sep">///</span>
+    <span>Smart Contracts</span><span class="sep">///</span><span>NFT Ecosystem</span><span class="sep">///</span>
+    <span>Layer 2 Solutions</span><span class="sep">///</span><span>Blockchain Dev</span><span class="sep">///</span>
+    <span>Cryptography</span><span class="sep">///</span><span>DAO Governance</span><span class="sep">///</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero" id="about">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Svyasa University · Est. 2026</div>
+    <h1>Build the<br><em>Decentralised</em><br>Future.</h1>
+    <p>Upcoming workshops, airdrops, hackathons, and research opportunities in the Web3 and blockchain ecosystem.</p>
+    <div class="hero-btns">
+      <a href="#join" class="btn-primary">Join the Club</a>
+      <a href="#events" class="btn-secondary">View Events →</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="ha-corner tl"></div><div class="ha-corner tr"></div>
+    <div class="ha-corner bl"></div><div class="ha-corner br"></div>
+    <div class="bc-art">
+      <svg viewBox="0 0 600 520" xmlns="http://www.w3.org/2000/svg">
+        <defs><radialGradient id="ng" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f59e0b" stop-opacity=".6"/><stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/></radialGradient></defs>
+        <g stroke="rgba(245,158,11,0.15)" stroke-width="1" fill="none">
+          <line x1="80" y1="100" x2="220" y2="160"/><line x1="220" y1="160" x2="380" y2="80"/>
+          <line x1="380" y1="80" x2="520" y2="180"/><line x1="220" y1="160" x2="300" y2="300"/>
+          <line x1="380" y1="80" x2="300" y2="300"/><line x1="520" y1="180" x2="480" y2="360"/>
+          <line x1="300" y1="300" x2="480" y2="360"/><line x1="300" y1="300" x2="140" y2="400"/>
+          <line x1="80" y1="100" x2="140" y2="400"/><line x1="140" y1="400" x2="300" y2="460"/>
+          <line x1="480" y1="360" x2="300" y2="460"/>
+        </g>
+        <g><circle cx="300" cy="300" r="32" fill="url(#ng)" opacity=".5"/><circle cx="380" cy="80" r="24" fill="url(#ng)" opacity=".4"/><circle cx="80" cy="100" r="18" fill="url(#ng)" opacity=".3"/></g>
+        <g fill="rgba(245,158,11,0.06)" stroke="rgba(245,158,11,0.3)" stroke-width="1">
+          <rect x="55" y="82" width="50" height="36" rx="1"/><rect x="195" y="143" width="50" height="36" rx="1"/>
+          <rect x="355" y="62" width="50" height="36" rx="1"/><rect x="275" y="282" width="50" height="36" rx="1"/>
+          <rect x="115" y="382" width="50" height="36" rx="1"/>
+        </g>
+        <g font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,158,11,0.45)" text-anchor="middle">
+          <text x="80" y="99">0x4a2b</text><text x="80" y="108">BLOCK</text>
+          <text x="220" y="159">0x9f1c</text><text x="220" y="168">BLOCK</text>
+          <text x="380" y="79">0x7e3d</text><text x="380" y="88">BLOCK</text>
+          <text x="300" y="299">0x5b4f</text><text x="300" y="308">BLOCK</text>
+          <text x="140" y="399">0x8d2c</text><text x="140" y="408">BLOCK</text>
+        </g>
+        <g fill="rgba(245,158,11,0.65)">
+          <circle cx="80" cy="100" r="4"/><circle cx="220" cy="160" r="4"/><circle cx="380" cy="80" r="4"/>
+          <circle cx="300" cy="300" r="5"/><circle cx="140" cy="400" r="4"/>
+        </g>
+        <circle cx="300" cy="300" r="8" fill="none" stroke="rgba(245,158,11,0.5)" stroke-width="1.5">
+          <animate attributeName="r" values="8;20;8" dur="3s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values=".6;0;.6" dur="3s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
+    <div class="hex-mark">
+      <div class="hex-outer"><div class="hex-mid"><div class="hex-core"><span class="hex-s">S</span></div></div></div>
+      <div class="hex-mark-name">Svyasa Blockchain Club</div>
+      <div class="hex-mark-sub">Bengaluru · India · Est. 2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat reveal"><div class="stat-num">3+</div><div class="stat-label">Members</div></div>
+  <div class="stat reveal"><div class="stat-num">*</div><div class="stat-label">Events Hosted</div></div>
+  <div class="stat reveal"><div class="stat-num">*</div><div class="stat-label">Projects Built</div></div>
+  <div class="stat reveal"><div class="stat-num">*</div><div class="stat-label">Hackathon Wins</div></div>
+</div>
+
+<!-- CHAIN DIVIDER -->
+<div class="chain-divider"><div class="chain-divider-inner" id="chainScroll"></div></div>
+
+<!-- ══ POTENTIAL PATHWAYS — exactly 3 cards ══ -->
+<div class="section focus-section" id="focus">
+  <div class="section-eyebrow">What We Do</div>
+  <div class="section-title">Potential Pathways</div>
+  <p class="section-subtitle">Three core tracks at Svyasa Blockchain Club — from building smart contracts to researching zero-knowledge cryptography.</p>
+
+  <div class="pathway-grid">
+
+    <!-- CARD 1: Smart Contract Engineering -->
+    <div class="pathway-card reveal">
+      <div class="pc-label"><span>Development</span><div class="pc-dot"></div></div>
+      <div class="pc-icon-wrap" style="background:linear-gradient(150deg,#0b0f1a 0%,#111c35 100%);">
+        <svg class="pc-art" viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg">
+          <!-- Code editor window -->
+          <rect x="16" y="12" width="288" height="166" rx="8" fill="rgba(245,158,11,.03)" stroke="rgba(245,158,11,.18)" stroke-width="1"/>
+          <rect x="16" y="12" width="288" height="26" rx="8" fill="rgba(245,158,11,.07)"/>
+          <rect x="16" y="30" width="288" height="8" fill="rgba(245,158,11,.07)"/>
+          <circle cx="30" cy="25" r="4" fill="rgba(245,158,11,.55)"/>
+          <circle cx="43" cy="25" r="4" fill="rgba(245,158,11,.3)"/>
+          <circle cx="56" cy="25" r="4" fill="rgba(245,158,11,.15)"/>
+          <rect x="68" y="18" width="68" height="14" rx="3" fill="rgba(245,158,11,.1)"/>
+          <text x="102" y="28" text-anchor="middle" font-family="monospace" font-size="7" fill="rgba(245,158,11,.55)">Token.sol</text>
+          <!-- Line numbers -->
+          <g font-family="monospace" font-size="7" fill="rgba(245,158,11,.16)" text-anchor="end">
+            <text x="34" y="54">1</text><text x="34" y="66">2</text><text x="34" y="78">3</text>
+            <text x="34" y="90">4</text><text x="34" y="102">5</text><text x="34" y="114">6</text>
+            <text x="34" y="126">7</text><text x="34" y="138">8</text><text x="34" y="150">9</text>
+          </g>
+          <!-- Syntax highlighted Solidity -->
+          <g font-family="monospace" font-size="8.5">
+            <text x="42" y="54"><tspan fill="rgba(167,139,250,.7)">pragma</tspan><tspan fill="rgba(245,158,11,.4)"> solidity </tspan><tspan fill="rgba(110,231,183,.55)">^0.8.20</tspan><tspan fill="rgba(245,158,11,.35)">;</tspan></text>
+            <text x="42" y="68"><tspan fill="rgba(96,165,250,.7)">contract</tspan><tspan fill="rgba(245,158,11,.65)"> SBCToken </tspan><tspan fill="rgba(245,158,11,.35)">{</tspan></text>
+            <text x="52" y="82"><tspan fill="rgba(167,139,250,.55)">mapping</tspan><tspan fill="rgba(245,158,11,.35)">(</tspan><tspan fill="rgba(96,165,250,.5)">address</tspan><tspan fill="rgba(245,158,11,.35)"> =&gt; </tspan><tspan fill="rgba(96,165,250,.5)">uint256</tspan><tspan fill="rgba(245,158,11,.35)">) </tspan><tspan fill="rgba(110,231,183,.5)">bal</tspan><tspan fill="rgba(245,158,11,.35)">;</tspan></text>
+            <text x="52" y="96"><tspan fill="rgba(96,165,250,.6)">function</tspan><tspan fill="rgba(245,158,11,.6)"> transfer</tspan><tspan fill="rgba(245,158,11,.35)">(</tspan><tspan fill="rgba(96,165,250,.45)">address</tspan><tspan fill="rgba(245,158,11,.5)"> to</tspan><tspan fill="rgba(245,158,11,.35)">,</tspan></text>
+            <text x="64" y="110"><tspan fill="rgba(96,165,250,.45)">uint256</tspan><tspan fill="rgba(245,158,11,.5)"> amt</tspan><tspan fill="rgba(245,158,11,.35)">) </tspan><tspan fill="rgba(167,139,250,.55)">public</tspan><tspan fill="rgba(245,158,11,.35)"> {</tspan></text>
+            <text x="64" y="124"><tspan fill="rgba(110,231,183,.5)">bal</tspan><tspan fill="rgba(245,158,11,.35)">[to] += amt;</tspan></text>
+            <text x="64" y="138"><tspan fill="rgba(110,231,183,.45)">emit</tspan><tspan fill="rgba(245,158,11,.35)"> Transfer(msg.sender, to, amt);</tspan></text>
+            <text x="52" y="152"><tspan fill="rgba(245,158,11,.35)">}</tspan></text>
+          </g>
+          <!-- Blinking cursor -->
+          <rect x="42" y="143" width="6" height="10" fill="rgba(245,158,11,.55)" rx="1">
+            <animate attributeName="opacity" values="1;0;1" dur="1.1s" repeatCount="indefinite"/>
+          </rect>
+          <!-- Right side: hash decoration -->
+          <g font-family="monospace" font-size="6" fill="rgba(245,158,11,.12)" text-anchor="end">
+            <text x="296" y="60">// gas: 21000</text>
+            <text x="296" y="76">// ERC-20</text>
+            <text x="296" y="132">// ✓ audited</text>
+          </g>
+        </svg>
+        <span class="pc-emoji" style="font-size:2.8rem;filter:drop-shadow(0 0 16px rgba(245,158,11,.6));">⌬</span>
+      </div>
+      <div class="pc-body">
+        <div class="pc-category">Development</div>
+        <div class="pc-title">Smart Contract Engineering</div>
+      </div>
+      <div class="pc-desc">Write, audit, and deploy Solidity contracts. Master Hardhat, Foundry, and gas optimisation for production-grade on-chain code.</div>
+    </div>
+
+    <!-- CARD 2: DeFi Protocols -->
+    <div class="pathway-card reveal">
+      <div class="pc-label"><span>Exchange</span><div class="pc-dot"></div></div>
+      <div class="pc-icon-wrap" style="background:linear-gradient(150deg,#0c1a0e 0%,#0a2415 100%);">
+        <svg class="pc-art" viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg">
+          <!-- Grid lines -->
+          <g stroke="rgba(52,211,153,.07)" stroke-width=".8">
+            <line x1="40" y1="20" x2="40" y2="170"/><line x1="40" y1="170" x2="300" y2="170"/>
+            <line x1="40" y1="130" x2="300" y2="130"/><line x1="40" y1="90" x2="300" y2="90"/>
+            <line x1="40" y1="50" x2="300" y2="50"/>
+            <line x1="100" y1="20" x2="100" y2="170"/><line x1="160" y1="20" x2="160" y2="170"/>
+            <line x1="220" y1="20" x2="220" y2="170"/><line x1="280" y1="20" x2="280" y2="170"/>
+          </g>
+          <!-- Axes -->
+          <line x1="40" y1="20" x2="40" y2="170" stroke="rgba(52,211,153,.3)" stroke-width="1.2"/>
+          <line x1="40" y1="170" x2="300" y2="170" stroke="rgba(52,211,153,.3)" stroke-width="1.2"/>
+          <!-- Axis labels -->
+          <text x="170" y="184" text-anchor="middle" font-family="monospace" font-size="7" fill="rgba(52,211,153,.45)">Token A Reserve</text>
+          <text x="18" y="95" text-anchor="middle" font-family="monospace" font-size="6.5" fill="rgba(52,211,153,.45)" transform="rotate(-90,18,95)">Token B</text>
+          <!-- AMM x*y=k curve -->
+          <path d="M46,162 C55,132 72,108 97,92 C125,75 158,65 195,58 C230,52 265,50 298,49" fill="none" stroke="rgba(52,211,153,.65)" stroke-width="2.2" stroke-linecap="round"/>
+          <!-- Fill under curve -->
+          <path d="M46,162 C55,132 72,108 97,92 C125,75 158,65 195,58 C230,52 265,50 298,49 L298,170 L46,170 Z" fill="rgba(52,211,153,.05)"/>
+          <!-- Trade point -->
+          <circle cx="155" cy="67" r="5.5" fill="rgba(52,211,153,.8)"/>
+          <line x1="155" y1="67" x2="155" y2="170" stroke="rgba(52,211,153,.25)" stroke-width="1" stroke-dasharray="3 2"/>
+          <line x1="40" y1="67" x2="155" y2="67" stroke="rgba(52,211,153,.25)" stroke-width="1" stroke-dasharray="3 2"/>
+          <!-- Formula -->
+          <text x="225" y="72" font-family="monospace" font-size="9" fill="rgba(52,211,153,.6)" font-style="italic">x · y = k</text>
+          <!-- Pool badges -->
+          <rect x="48" y="22" width="44" height="14" rx="3" fill="rgba(52,211,153,.1)" stroke="rgba(52,211,153,.3)" stroke-width=".8"/>
+          <text x="70" y="31" text-anchor="middle" font-family="monospace" font-size="6.5" fill="rgba(52,211,153,.65)">ETH</text>
+          <rect x="103" y="22" width="50" height="14" rx="3" fill="rgba(245,158,11,.1)" stroke="rgba(245,158,11,.3)" stroke-width=".8"/>
+          <text x="128" y="31" text-anchor="middle" font-family="monospace" font-size="6.5" fill="rgba(245,158,11,.65)">USDC</text>
+          <!-- Swap arrows -->
+          <path d="M80,100 Q100,88 115,100" fill="none" stroke="rgba(52,211,153,.4)" stroke-width="1.2"/>
+          <polygon points="112,96 117,101 111,104" fill="rgba(52,211,153,.5)"/>
+          <path d="M115,115 Q100,126 80,115" fill="none" stroke="rgba(245,158,11,.35)" stroke-width="1.2"/>
+          <polygon points="83,119 78,114 84,111" fill="rgba(245,158,11,.45)"/>
+          <!-- Price impact text -->
+          <text x="240" y="110" font-family="monospace" font-size="6" fill="rgba(52,211,153,.35)">price impact</text>
+          <text x="240" y="120" font-family="monospace" font-size="6" fill="rgba(52,211,153,.5)">0.34%</text>
+        </svg>
+        <span class="pc-emoji" style="font-size:2.8rem;filter:drop-shadow(0 0 16px rgba(52,211,153,.5));">⟡</span>
+      </div>
+      <div class="pc-body">
+        <div class="pc-category">Exchange</div>
+        <div class="pc-title">DeFi Protocols & AMMs</div>
+      </div>
+      <div class="pc-desc">Study Aave money markets, and learn to build and interact with DEX liquidity pools on-chain.</div>
+    </div>
+
+    <!-- CARD 3: Zero-Knowledge & Cryptography -->
+    <div class="pathway-card reveal">
+      <div class="pc-label"><span>Research</span><div class="pc-dot"></div></div>
+      <div class="pc-icon-wrap" style="background:linear-gradient(150deg,#100820 0%,#1c0f38 100%);">
+        <svg class="pc-art" viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="zkRoot" cx="50%" cy="20%" r="35%">
+              <stop offset="0%" stop-color="#a78bfa" stop-opacity=".5"/>
+              <stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <!-- Root glow -->
+          <ellipse cx="160" cy="28" rx="40" ry="18" fill="url(#zkRoot)"/>
+          <!-- Tree connector lines -->
+          <g stroke="rgba(167,139,250,.22)" stroke-width="1" fill="none">
+            <line x1="160" y1="38" x2="90" y2="76"/><line x1="160" y1="38" x2="230" y2="76"/>
+            <line x1="90" y1="88" x2="55" y2="122"/><line x1="90" y1="88" x2="125" y2="122"/>
+            <line x1="230" y1="88" x2="195" y2="122"/><line x1="230" y1="88" x2="265" y2="122"/>
+            <line x1="55" y1="134" x2="36" y2="164"/><line x1="55" y1="134" x2="74" y2="164"/>
+            <line x1="125" y1="134" x2="108" y2="164"/><line x1="125" y1="134" x2="142" y2="164"/>
+            <line x1="195" y1="134" x2="178" y2="164"/><line x1="195" y1="134" x2="212" y2="164"/>
+            <line x1="265" y1="134" x2="248" y2="164"/><line x1="265" y1="134" x2="284" y2="164"/>
+          </g>
+          <!-- Root node -->
+          <rect x="135" y="18" width="50" height="20" rx="3" fill="rgba(167,139,250,.18)" stroke="rgba(167,139,250,.8)" stroke-width="1.5"/>
+          <text x="160" y="31" text-anchor="middle" font-family="monospace" font-size="7.5" fill="rgba(167,139,250,.9)" font-weight="bold">ROOT</text>
+          <!-- Level 1 -->
+          <rect x="68" y="76" width="44" height="18" rx="2" fill="rgba(167,139,250,.1)" stroke="rgba(167,139,250,.45)" stroke-width="1"/>
+          <text x="90" y="87.5" text-anchor="middle" font-family="monospace" font-size="6.5" fill="rgba(167,139,250,.65)">H(0+1)</text>
+          <rect x="208" y="76" width="44" height="18" rx="2" fill="rgba(167,139,250,.1)" stroke="rgba(167,139,250,.45)" stroke-width="1"/>
+          <text x="230" y="87.5" text-anchor="middle" font-family="monospace" font-size="6.5" fill="rgba(167,139,250,.65)">H(2+3)</text>
+          <!-- Level 2 -->
+          <g fill="rgba(167,139,250,.07)" stroke="rgba(167,139,250,.3)" stroke-width=".8">
+            <rect x="34" y="122" width="42" height="14" rx="2"/><rect x="104" y="122" width="42" height="14" rx="2"/>
+            <rect x="174" y="122" width="42" height="14" rx="2"/><rect x="244" y="122" width="42" height="14" rx="2"/>
+          </g>
+          <g font-family="monospace" font-size="6" fill="rgba(167,139,250,.5)" text-anchor="middle">
+            <text x="55" y="131.5">H(A)</text><text x="125" y="131.5">H(B)</text>
+            <text x="195" y="131.5">H(C)</text><text x="265" y="131.5">H(D)</text>
+          </g>
+          <!-- Leaf nodes - proof highlight gold -->
+          <rect x="18" y="158" width="36" height="13" rx="2" fill="rgba(245,158,11,.15)" stroke="rgba(245,158,11,.65)" stroke-width="1.2"/>
+          <text x="36" y="167" text-anchor="middle" font-family="monospace" font-size="5.5" fill="rgba(245,158,11,.85)">PROOF</text>
+          <g fill="rgba(167,139,250,.04)" stroke="rgba(167,139,250,.18)" stroke-width=".7">
+            <rect x="62" y="158" width="36" height="13" rx="2"/><rect x="96" y="158" width="36" height="13" rx="2"/>
+            <rect x="166" y="158" width="36" height="13" rx="2"/><rect x="200" y="158" width="36" height="13" rx="2"/>
+            <rect x="234" y="158" width="36" height="13" rx="2"/><rect x="268" y="158" width="36" height="13" rx="2"/>
+          </g>
+          <g font-family="monospace" font-size="5.5" fill="rgba(167,139,250,.38)" text-anchor="middle">
+            <text x="80" y="167">Tx B</text><text x="114" y="167">Tx C</text>
+            <text x="184" y="167">Tx D</text><text x="218" y="167">Tx E</text>
+            <text x="252" y="167">Tx F</text><text x="286" y="167">Tx G</text>
+          </g>
+          <!-- Pulse on root -->
+          <circle cx="160" cy="28" r="26" fill="none" stroke="rgba(167,139,250,.35)" stroke-width="1">
+            <animate attributeName="r" values="26;40;26" dur="3.5s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values=".5;0;.5" dur="3.5s" repeatCount="indefinite"/>
+          </circle>
+          <!-- ZK label -->
+          <text x="160" y="185" text-anchor="middle" font-family="monospace" font-size="6.5" fill="rgba(167,139,250,.3)" letter-spacing="2">MERKLE PROOF TREE</text>
+        </svg>
+        <span class="pc-emoji" style="font-size:2.8rem;filter:drop-shadow(0 0 16px rgba(167,139,250,.7));">⊕</span>
+      </div>
+      <div class="pc-body">
+        <div class="pc-category">Research</div>
+        <div class="pc-title">Zero-Knowledge & Cryptography</div>
+      </div>
+      <div class="pc-desc">Explore ZK-SNARKs, STARKs, Merkle proofs, and the mathematics behind private, verifiable blockchain computation at scale.</div>
+    </div>
+   <!-- CARD 1: Smart Contract Audit -->
+<div class="pathway-card reveal">
+  <div class="pc-label"><span>Security</span><div class="pc-dot"></div></div>
+  <div class="pc-icon-wrap" style="background:linear-gradient(150deg,#0f0a0a 0%,#1f1010 100%);">
+    <svg class="pc-art" viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg">
+      <!-- Shield outline -->
+      <path d="M160 18 L220 44 L220 110 Q220 150 160 172 Q100 150 100 110 L100 44 Z"
+            fill="rgba(239,68,68,.05)" stroke="rgba(239,68,68,.35)" stroke-width="1.5"/>
+      <!-- Shield inner glow -->
+      <path d="M160 30 L208 52 L208 108 Q208 140 160 158 Q112 140 112 108 L112 52 Z"
+            fill="rgba(239,68,68,.04)" stroke="rgba(239,68,68,.15)" stroke-width=".8"/>
+      <!-- Code lines inside shield -->
+      <g font-family="monospace" font-size="7.5">
+        <text x="132" y="76"><tspan fill="rgba(239,68,68,.75)">function</tspan><tspan fill="rgba(255,200,200,.4)"> withdraw</tspan><tspan fill="rgba(255,200,200,.3)">()</tspan></text>
+        <text x="138" y="90"><tspan fill="rgba(255,200,200,.35)">uint amt = bal[msg</tspan></text>
+        <text x="138" y="104"><tspan fill="rgba(239,68,68,.6)">.sender];</tspan></text>
+        <text x="138" y="118"><tspan fill="rgba(252,165,165,.3)">(bool ok,) = msg</tspan></text>
+        <text x="138" y="132"><tspan fill="rgba(252,165,165,.25)">.sender.call{</tspan></text>
+        <text x="148" y="144"><tspan fill="rgba(239,68,68,.55)">value: amt}("");</tspan></text>
+      </g>
+      <!-- Bug marker - reentrancy alert -->
+      <rect x="88" y="86" width="14" height="14" rx="2" fill="rgba(239,68,68,.85)"/>
+      <text x="95" y="96" text-anchor="middle" font-family="monospace" font-size="8" fill="white" font-weight="bold">!</text>
+      <!-- Warning label -->
+      <rect x="44" y="83" width="40" height="12" rx="2" fill="rgba(239,68,68,.12)" stroke="rgba(239,68,68,.4)" stroke-width=".8"/>
+      <text x="64" y="91.5" text-anchor="middle" font-family="monospace" font-size="5.5" fill="rgba(239,68,68,.75)">REENTRANCY</text>
+      <!-- Connector line -->
+      <line x1="84" y1="93" x2="102" y2="93" stroke="rgba(239,68,68,.4)" stroke-width=".8" stroke-dasharray="2 1"/>
+      <!-- Check marks - passed audits -->
+      <g font-family="monospace" font-size="6.5" fill="rgba(110,231,183,.5)">
+        <text x="226" y="60">✓ overflow</text>
+        <text x="226" y="74">✓ access ctrl</text>
+        <text x="226" y="88">✓ front-run</text>
+      </g>
+      <!-- Failed check -->
+      <text x="226" y="102" font-family="monospace" font-size="6.5" fill="rgba(239,68,68,.75)">✗ reentrancy</text>
+      <!-- Pulse ring on shield -->
+      <path d="M160 18 L220 44 L220 110 Q220 150 160 172 Q100 150 100 110 L100 44 Z"
+            fill="none" stroke="rgba(239,68,68,.3)" stroke-width="1.5">
+        <animate attributeName="opacity" values=".6;0;.6" dur="2.8s" repeatCount="indefinite"/>
+        <animate attributeName="stroke-width" values="1.5;4;1.5" dur="2.8s" repeatCount="indefinite"/>
+      </path>
+      <!-- Bottom label -->
+      <text x="160" y="185" text-anchor="middle" font-family="monospace" font-size="6.5" fill="rgba(239,68,68,.3)" letter-spacing="2">VULNERABILITY SCAN</text>
+    </svg>
+    <span class="pc-emoji" style="font-size:2.8rem;filter:drop-shadow(0 0 16px rgba(239,68,68,.6));">⚠</span>
+  </div>
+  <div class="pc-body">
+    <div class="pc-category">Security</div>
+    <div class="pc-title">Smart Contract Auditing</div>
+  </div>
+  <div class="pc-desc">Identify reentrancy, overflow, and access-control vulnerabilities. Learn to use Slither, Mythril, and manual review techniques to harden production contracts.</div>
+</div>
+
+<!-- CARD 2: Marketing -->
+<div class="pathway-card reveal">
+  <div class="pc-label"><span>Growth</span><div class="pc-dot"></div></div>
+  <div class="pc-icon-wrap" style="background:linear-gradient(150deg,#0a0f1a 0%,#0d1535 100%);">
+    <svg class="pc-art" viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg">
+      <!-- Grid -->
+      <g stroke="rgba(96,165,250,.06)" stroke-width=".8">
+        <line x1="40" y1="20" x2="40" y2="160"/><line x1="40" y1="160" x2="295" y2="160"/>
+        <line x1="40" y1="120" x2="295" y2="120"/><line x1="40" y1="80" x2="295" y2="80"/>
+        <line x1="40" y1="40" x2="295" y2="40"/>
+        <line x1="95" y1="20" x2="95" y2="160"/><line x1="150" y1="20" x2="150" y2="160"/>
+        <line x1="205" y1="20" x2="205" y2="160"/><line x1="260" y1="20" x2="260" y2="160"/>
+      </g>
+      <!-- Axes -->
+      <line x1="40" y1="20" x2="40" y2="160" stroke="rgba(96,165,250,.3)" stroke-width="1.2"/>
+      <line x1="40" y1="160" x2="295" y2="160" stroke="rgba(96,165,250,.3)" stroke-width="1.2"/>
+      <!-- Growth curve -->
+      <path d="M45,155 C80,150 100,142 130,128 C160,114 175,90 205,68 C230,50 255,36 290,28"
+            fill="none" stroke="rgba(96,165,250,.7)" stroke-width="2.2" stroke-linecap="round"/>
+      <!-- Fill under curve -->
+      <path d="M45,155 C80,150 100,142 130,128 C160,114 175,90 205,68 C230,50 255,36 290,28 L290,160 L45,160 Z"
+            fill="rgba(96,165,250,.06)"/>
+      <!-- Funnel stages - right side -->
+      <rect x="226" y="55" width="62" height="12" rx="2" fill="rgba(96,165,250,.2)" stroke="rgba(96,165,250,.4)" stroke-width=".8"/>
+      <rect x="232" y="71" width="50" height="12" rx="2" fill="rgba(96,165,250,.15)" stroke="rgba(96,165,250,.3)" stroke-width=".8"/>
+      <rect x="238" y="87" width="38" height="12" rx="2" fill="rgba(96,165,250,.1)" stroke="rgba(96,165,250,.2)" stroke-width=".8"/>
+      <rect x="244" y="103" width="26" height="12" rx="2" fill="rgba(245,158,11,.15)" stroke="rgba(245,158,11,.4)" stroke-width=".8"/>
+      <g font-family="monospace" font-size="5.5" text-anchor="middle">
+        <text x="257" y="63.5" fill="rgba(96,165,250,.7)">AWARENESS</text>
+        <text x="257" y="79.5" fill="rgba(96,165,250,.6)">INTEREST</text>
+        <text x="257" y="95.5" fill="rgba(96,165,250,.5)">CONSIDER</text>
+        <text x="257" y="111.5" fill="rgba(245,158,11,.75)">CONVERT</text>
+      </g>
+      <!-- Metric chips -->
+      <rect x="48" y="22" width="46" height="14" rx="3" fill="rgba(96,165,250,.1)" stroke="rgba(96,165,250,.3)" stroke-width=".8"/>
+      <text x="71" y="31.5" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(96,165,250,.7)">CTR 4.2%</text>
+      <rect x="102" y="22" width="46" height="14" rx="3" fill="rgba(110,231,183,.1)" stroke="rgba(110,231,183,.3)" stroke-width=".8"/>
+      <text x="125" y="31.5" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(110,231,183,.7)">ROI 3.8x</text>
+      <!-- Data points on curve -->
+      <circle cx="130" cy="128" r="3.5" fill="rgba(96,165,250,.8)"/>
+      <circle cx="205" cy="68" r="3.5" fill="rgba(96,165,250,.8)"/>
+      <circle cx="290" cy="28" r="4.5" fill="rgba(245,158,11,.9)"/>
+      <!-- Blinking dot at peak -->
+      <circle cx="290" cy="28" r="7" fill="none" stroke="rgba(245,158,11,.5)" stroke-width="1">
+        <animate attributeName="r" values="7;13;7" dur="2.2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".7;0;.7" dur="2.2s" repeatCount="indefinite"/>
+      </circle>
+      <!-- X axis labels -->
+      <g font-family="monospace" font-size="6" fill="rgba(96,165,250,.3)" text-anchor="middle">
+        <text x="95" y="171">Q1</text><text x="150" y="171">Q2</text>
+        <text x="205" y="171">Q3</text><text x="260" y="171">Q4</text>
+      </g>
+    </svg>
+    <span class="pc-emoji" style="font-size:2.8rem;filter:drop-shadow(0 0 16px rgba(96,165,250,.5));">◈</span>
+  </div>
+  <div class="pc-body">
+    <div class="pc-category">Growth</div>
+    <div class="pc-title">Web3 Marketing & Growth</div>
+  </div>
+  <div class="pc-desc">Build community, drive adoption, and grow protocols. Master tokenomics storytelling, on-chain analytics, and conversion funnels for crypto-native audiences.</div>
+</div>
+
+<!-- CARD 3: Trading -->
+<div class="pathway-card reveal">
+  <div class="pc-label"><span>Finance</span><div class="pc-dot"></div></div>
+  <div class="pc-icon-wrap" style="background:linear-gradient(150deg,#0a1209 0%,#0e1f0a 100%);">
+    <svg class="pc-art" viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg">
+      <!-- Grid -->
+      <g stroke="rgba(52,211,153,.06)" stroke-width=".8">
+        <line x1="20" y1="170" x2="305" y2="170"/><line x1="20" y1="130" x2="305" y2="130"/>
+        <line x1="20" y1="90" x2="305" y2="90"/><line x1="20" y1="50" x2="305" y2="50"/>
+      </g>
+      <!-- Candlesticks -->
+      <!-- Candle helper: green = close > open, red = close < open -->
+      <!-- C1 green -->
+      <line x1="38" y1="148" x2="38" y2="128" stroke="rgba(52,211,153,.6)" stroke-width="1"/>
+      <rect x="33" y="132" width="10" height="12" fill="rgba(52,211,153,.55)" rx="1"/>
+      <!-- C2 green -->
+      <line x1="60" y1="145" x2="60" y2="118" stroke="rgba(52,211,153,.6)" stroke-width="1"/>
+      <rect x="55" y="122" width="10" height="18" fill="rgba(52,211,153,.55)" rx="1"/>
+      <!-- C3 red -->
+      <line x1="82" y1="118" x2="82" y2="138" stroke="rgba(239,68,68,.55)" stroke-width="1"/>
+      <rect x="77" y="118" width="10" height="14" fill="rgba(239,68,68,.5)" rx="1"/>
+      <!-- C4 red -->
+      <line x1="104" y1="125" x2="104" y2="143" stroke="rgba(239,68,68,.55)" stroke-width="1"/>
+      <rect x="99" y="127" width="10" height="12" fill="rgba(239,68,68,.5)" rx="1"/>
+      <!-- C5 green -->
+      <line x1="126" y1="112" x2="126" y2="138" stroke="rgba(52,211,153,.6)" stroke-width="1"/>
+      <rect x="121" y="114" width="10" height="18" fill="rgba(52,211,153,.55)" rx="1"/>
+      <!-- C6 green big -->
+      <line x1="148" y1="88" x2="148" y2="130" stroke="rgba(52,211,153,.6)" stroke-width="1"/>
+      <rect x="143" y="92" width="10" height="30" fill="rgba(52,211,153,.65)" rx="1"/>
+      <!-- C7 green -->
+      <line x1="170" y1="78" x2="170" y2="108" stroke="rgba(52,211,153,.6)" stroke-width="1"/>
+      <rect x="165" y="80" width="10" height="22" fill="rgba(52,211,153,.65)" rx="1"/>
+      <!-- C8 red -->
+      <line x1="192" y1="78" x2="192" y2="102" stroke="rgba(239,68,68,.55)" stroke-width="1"/>
+      <rect x="187" y="82" width="10" height="14" fill="rgba(239,68,68,.5)" rx="1"/>
+      <!-- C9 green -->
+      <line x1="214" y1="56" x2="214" y2="88" stroke="rgba(52,211,153,.7)" stroke-width="1"/>
+      <rect x="209" y="58" width="10" height="24" fill="rgba(52,211,153,.7)" rx="1"/>
+      <!-- C10 green -->
+      <line x1="236" y1="42" x2="236" y2="74" stroke="rgba(52,211,153,.7)" stroke-width="1"/>
+      <rect x="231" y="44" width="10" height="26" fill="rgba(52,211,153,.75)" rx="1"/>
+      <!-- C11 red -->
+      <line x1="258" y1="46" x2="258" y2="72" stroke="rgba(239,68,68,.55)" stroke-width="1"/>
+      <rect x="253" y="50" width="10" height="16" fill="rgba(239,68,68,.5)" rx="1"/>
+      <!-- C12 green bright -->
+      <line x1="280" y1="30" x2="280" y2="60" stroke="rgba(52,211,153,.8)" stroke-width="1"/>
+      <rect x="275" y="32" width="10" height="22" fill="rgba(52,211,153,.85)" rx="1"/>
+      <!-- Moving average line -->
+      <path d="M38,145 C60,140 82,134 104,132 C126,128 148,112 170,94 C192,82 214,66 236,54 C258,50 280,40 300,36"
+            fill="none" stroke="rgba(245,158,11,.6)" stroke-width="1.5" stroke-dasharray="4 2"/>
+      <!-- Volume bars at bottom -->
+      <g fill="rgba(52,211,153,.2)">
+        <rect x="33" y="158" width="10" height="8" rx="1"/>
+        <rect x="55" y="155" width="10" height="11" rx="1"/>
+        <rect x="121" y="156" width="10" height="10" rx="1"/>
+        <rect x="143" y="153" width="10" height="13" rx="1"/>
+        <rect x="165" y="152" width="10" height="14" rx="1"/>
+        <rect x="209" y="151" width="10" height="15" rx="1"/>
+        <rect x="231" y="150" width="10" height="16" rx="1"/>
+        <rect x="275" y="149" width="10" height="17" rx="1"/>
+      </g>
+      <g fill="rgba(239,68,68,.2)">
+        <rect x="77" y="157" width="10" height="9" rx="1"/>
+        <rect x="99" y="158" width="10" height="8" rx="1"/>
+        <rect x="187" y="158" width="10" height="8" rx="1"/>
+        <rect x="253" y="157" width="10" height="9" rx="1"/>
+      </g>
+      <!-- Indicator chips top-left -->
+      <rect x="20" y="18" width="38" height="13" rx="2" fill="rgba(245,158,11,.1)" stroke="rgba(245,158,11,.35)" stroke-width=".8"/>
+      <text x="39" y="27" text-anchor="middle" font-family="monospace" font-size="5.5" fill="rgba(245,158,11,.7)">MA(20)</text>
+      <rect x="63" y="18" width="32" height="13" rx="2" fill="rgba(96,165,250,.1)" stroke="rgba(96,165,250,.3)" stroke-width=".8"/>
+      <text x="79" y="27" text-anchor="middle" font-family="monospace" font-size="5.5" fill="rgba(96,165,250,.7)">RSI</text>
+      <rect x="100" y="18" width="38" height="13" rx="2" fill="rgba(167,139,250,.1)" stroke="rgba(167,139,250,.3)" stroke-width=".8"/>
+      <text x="119" y="27" text-anchor="middle" font-family="monospace" font-size="5.5" fill="rgba(167,139,250,.7)">MACD</text>
+      <!-- Price tag -->
+      <rect x="256" y="18" width="56" height="15" rx="3" fill="rgba(52,211,153,.15)" stroke="rgba(52,211,153,.5)" stroke-width="1"/>
+      <text x="284" y="28.5" text-anchor="middle" font-family="monospace" font-size="7" fill="rgba(52,211,153,.9)" font-weight="bold">+12.4%</text>
+    </svg>
+    <span class="pc-emoji" style="font-size:2.8rem;filter:drop-shadow(0 0 16px rgba(52,211,153,.5));">⟲</span>
+  </div>
+  <div class="pc-body">
+    <div class="pc-category">Finance</div>
+    <div class="pc-title">Crypto Trading & Strategy</div>
+  </div>
+  <div class="pc-desc">Read candlestick charts, apply technical indicators, and build algorithmic trading bots. Understand market microstructure, risk management, and on-chain signals.</div>
+</div>
+  </div>
+</div>
+
+<!-- EVENTS -->
+<div class="section events-section" id="events">
+  <div class="section-eyebrow">What's Coming</div>
+  <div class="section-title">Events & Workshops</div>
+  <div class="events-grid">
+    <div class="event-item reveal">
+      <div class="event-date"><div class="ev-day">24</div><div class="ev-month">March</div></div>
+      <div class="event-info"><h3>Intro to Blockchain & ZK-Verify</h3><p>Hands-on workshop for beginners. learn zero knowledge Proofs(ZK) and build your first ZK-enabled Dapp.</p><div class="event-tag">Workshop</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOCKCHAIN ART BAND -->
+<div class="bc-band">
+  <div class="bc-band-text reveal">
+    <div class="bc-band-eyebrow">The Technology</div>
+    <div class="bc-band-title">Every block<br>tells a <em>story.</em></div>
+    <div class="bc-band-desc">Blockchain is more than technology — it's a new paradigm for trust, ownership, and coordination. At SBC we go beyond the surface to understand the protocol layer deeply.</div>
+  </div>
+  <div class="bc-band-svg reveal">
+    <svg viewBox="0 0 500 260" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <defs>
+        <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#f59e0b" stop-opacity=".7"/><stop offset="100%" stop-color="#f59e0b" stop-opacity=".1"/></linearGradient>
+        <filter id="glow2"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <line x1="30" y1="130" x2="470" y2="130" stroke="url(#lg1)" stroke-width="1.5"/>
+      <g filter="url(#glow2)">
+        <rect x="30" y="100" width="70" height="60" fill="rgba(245,158,11,.08)" stroke="rgba(245,158,11,.5)" stroke-width="1.5" rx="2"/>
+        <text x="65" y="124" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,158,11,.7)">BLOCK #001</text>
+        <text x="65" y="136" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="rgba(245,158,11,.45)">0x3f2a9b1c</text>
+        <text x="65" y="148" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5.5" fill="rgba(245,158,11,.3)">TXN: 3</text>
+        <rect x="140" y="100" width="70" height="60" fill="rgba(245,158,11,.08)" stroke="rgba(245,158,11,.5)" stroke-width="1.5" rx="2"/>
+        <text x="175" y="124" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,158,11,.7)">BLOCK #002</text>
+        <text x="175" y="136" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="rgba(245,158,11,.45)">0x9c8d4e7f</text>
+        <text x="175" y="148" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5.5" fill="rgba(245,158,11,.3)">TXN: 7</text>
+        <!-- Highlighted block -->
+        <rect x="250" y="88" width="84" height="84" fill="rgba(245,158,11,.12)" stroke="rgba(245,158,11,.95)" stroke-width="2" rx="2"/>
+        <rect x="258" y="96" width="68" height="68" fill="none" stroke="rgba(245,158,11,.22)" stroke-width="1" stroke-dasharray="3 2"/>
+        <text x="292" y="122" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,158,11,.9)">BLOCK #003</text>
+        <text x="292" y="134" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="rgba(245,158,11,.65)">0x1b7e2a3d</text>
+        <text x="292" y="146" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5.5" fill="rgba(245,158,11,.4)">TXN: 12</text>
+        <text x="292" y="158" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5" fill="rgba(245,158,11,.35)">LATEST</text>
+        <!-- Pending -->
+        <rect x="385" y="110" width="70" height="40" fill="rgba(245,158,11,.03)" stroke="rgba(245,158,11,.2)" stroke-width="1" rx="2" stroke-dasharray="4 3"/>
+        <text x="420" y="127" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,158,11,.28)">PENDING</text>
+        <text x="420" y="139" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5.5" fill="rgba(245,158,11,.18)">mining...</text>
+      </g>
+      <!-- Arrows -->
+      <g stroke="rgba(245,158,11,.4)" stroke-width="1.5" fill="rgba(245,158,11,.4)">
+        <line x1="100" y1="130" x2="136" y2="130"/><polygon points="133,126 140,130 133,134"/>
+        <line x1="210" y1="130" x2="246" y2="130"/><polygon points="243,126 250,130 243,134"/>
+        <line x1="334" y1="130" x2="381" y2="130"/><polygon points="378,126 385,130 378,134"/>
+      </g>
+      <!-- Mining dots -->
+      <g><circle cx="397" cy="132" r="2.5" fill="rgba(245,158,11,.5)"><animate attributeName="opacity" values="1;0;1" dur="1.1s" repeatCount="indefinite" begin="0s"/></circle>
+      <circle cx="410" cy="132" r="2.5" fill="rgba(245,158,11,.5)"><animate attributeName="opacity" values="1;0;1" dur="1.1s" repeatCount="indefinite" begin="0.37s"/></circle>
+      <circle cx="423" cy="132" r="2.5" fill="rgba(245,158,11,.5)"><animate attributeName="opacity" values="1;0;1" dur="1.1s" repeatCount="indefinite" begin="0.73s"/></circle></g>
+      <!-- Prev hash labels -->
+      <g fill="none" stroke="rgba(245,158,11,.15)" stroke-width="1"><path d="M100,105 Q120,72 140,105"/><path d="M210,105 Q230,72 250,105"/></g>
+      <g font-family="JetBrains Mono,monospace" font-size="5" fill="rgba(245,158,11,.22)" text-anchor="middle"><text x="120" y="68">prev hash</text><text x="230" y="68">prev hash</text></g>
+    </svg>
+  </div>
+</div>
+
+<!-- ══ CLUB MEMBERS — exactly 3 cards ══ -->
+<div class="section members-section" id="members">
+  <div class="section-eyebrow">The People</div>
+  <div class="section-title">Club Members</div>
+  <p class="section-subtitle">Meet the core team building the decentralised future at Svyasa University.</p>
+
+  <div class="members-grid">
+
+    <!-- Member 1: President -->
+    <div class="member-card reveal">
+      <div class="m-avatar av-a">
+        <div class="m-avatar-noise"></div>
+        <div class="m-avatar-fade"></div>
+        <div class="m-avatar-art">
+          <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+            <g stroke="rgba(245,158,11,.4)" stroke-width=".8" fill="none">
+              <circle cx="160" cy="90" r="60"/><circle cx="160" cy="90" r="40" stroke-dasharray="5 3"/>
+              <circle cx="160" cy="90" r="20"/>
+              <line x1="100" y1="90" x2="60" y2="90"/><line x1="220" y1="90" x2="260" y2="90"/>
+              <line x1="160" y1="30" x2="160" y2="10"/><line x1="160" y1="150" x2="160" y2="170"/>
+            </g>
+            <g fill="rgba(245,158,11,.7)">
+              <circle cx="100" cy="90" r="3"/><circle cx="220" cy="90" r="3"/>
+              <circle cx="160" cy="30" r="3"/><circle cx="160" cy="150" r="3"/>
+              <circle cx="117" cy="47" r="2.5"/><circle cx="203" cy="47" r="2.5"/>
+              <circle cx="117" cy="133" r="2.5"/><circle cx="203" cy="133" r="2.5"/>
+            </g>
+          </svg>
+        </div>
+        <span class="m-initials">GM</span>
+        <div class="m-badge">President</div>
+      </div>
+      <div class="m-info">
+        <div class="m-name">Gopisetty Govind</div>
+        <div class="m-role">Club President</div>
+        <div class="m-tags"><span class="m-tag">Ambassador</span><span class="m-tag alt">Solidity</span><span class="m-tag">Trader</span></div>
+      </div>
+    </div>
+
+    <!-- Member 2: VP -->
+    <div class="member-card reveal">
+      <div class="m-avatar av-e">
+        <div class="m-avatar-noise"></div>
+        <div class="m-avatar-fade"></div>
+        <div class="m-avatar-art">
+          <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+            <!-- Merkle tree art -->
+            <g stroke="rgba(96,165,250,.5)" stroke-width=".8" fill="none">
+              <line x1="160" y1="20" x2="90" y2="70"/><line x1="160" y1="20" x2="230" y2="70"/>
+              <line x1="90" y1="70" x2="55" y2="120"/><line x1="90" y1="70" x2="125" y2="120"/>
+              <line x1="230" y1="70" x2="195" y2="120"/><line x1="230" y1="70" x2="265" y2="120"/>
+            </g>
+            <g fill="rgba(96,165,250,.55)">
+              <circle cx="160" cy="20" r="5"/><circle cx="90" cy="70" r="4"/>
+              <circle cx="230" cy="70" r="4"/><circle cx="55" cy="120" r="3"/>
+              <circle cx="125" cy="120" r="3"/><circle cx="195" cy="120" r="3"/><circle cx="265" cy="120" r="3"/>
+            </g>
+            <g fill="none" stroke="rgba(96,165,250,.25)" stroke-width=".6">
+              <rect x="25" y="143" width="32" height="14" rx="2"/><rect x="63" y="143" width="32" height="14" rx="2"/>
+              <rect x="101" y="143" width="32" height="14" rx="2"/><rect x="165" y="143" width="32" height="14" rx="2"/>
+              <rect x="203" y="143" width="32" height="14" rx="2"/><rect x="241" y="143" width="32" height="14" rx="2"/>
+              <rect x="279" y="143" width="32" height="14" rx="2"/>
+            </g>
+          </svg>
+        </div>
+        <span class="m-initials">VK</span>
+        <div class="m-badge">Core</div>
+      </div>
+      <div class="m-info">
+        <div class="m-name">Vikas pujari</div>
+        <div class="m-role">developer</div>
+        <div class="m-tags"><span class="m-tag">ZK Proofs</span><span class="m-tag alt">Research</span><span class="m-tag">Events</span></div>
+      </div>
+    </div>
+
+    <!-- Member 3: Join card -->
+    <div class="member-card reveal" onclick="document.getElementById('join').scrollIntoView({behavior:'smooth'})" style="cursor:pointer">
+      <div class="m-avatar" style="background:linear-gradient(140deg,#0b0f1a,#1a2235)">
+        <div class="m-avatar-noise"></div>
+        <div class="m-avatar-fade"></div>
+        <div class="m-avatar-art" style="opacity:.35">
+          <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+            <!-- Network mesh -->
+            <g stroke="rgba(245,158,11,.5)" stroke-width=".8" fill="none">
+              <line x1="160" y1="90" x2="80" y2="40"/><line x1="160" y1="90" x2="240" y2="40"/>
+              <line x1="160" y1="90" x2="60" y2="130"/><line x1="160" y1="90" x2="260" y2="130"/>
+              <line x1="160" y1="90" x2="160" y2="15"/>
+              <line x1="80" y1="40" x2="60" y2="130"/><line x1="240" y1="40" x2="260" y2="130"/>
+              <line x1="80" y1="40" x2="160" y2="15"/><line x1="240" y1="40" x2="160" y2="15"/>
+              <line x1="60" y1="130" x2="260" y2="130"/>
+            </g>
+            <g fill="rgba(245,158,11,.7)">
+              <circle cx="160" cy="90" r="6"/><circle cx="80" cy="40" r="4"/><circle cx="240" cy="40" r="4"/>
+              <circle cx="60" cy="130" r="4"/><circle cx="260" cy="130" r="4"/><circle cx="160" cy="15" r="4"/>
+            </g>
+            <!-- Plus symbol in center -->
+            <g stroke="rgba(245,158,11,.8)" stroke-width="3" stroke-linecap="round">
+              <line x1="150" y1="90" x2="170" y2="90"/><line x1="160" y1="80" x2="160" y2="100"/>
+            </g>
+          </svg>
+        </div>
+        <span style="font-size:3rem;color:var(--amber);font-family:'Playfair Display',serif;font-weight:900;position:relative;z-index:3;text-shadow:0 0 20px rgba(245,158,11,.5)">+</span>
+      </div>
+      <div class="m-info" style="background:var(--navy);border-color:rgba(245,158,11,.15)">
+        <div class="m-name" style="color:var(--amber)">You?</div>
+        <div class="m-role" style="color:var(--muted)">Join the Club</div>
+        <div class="m-tags"><span class="m-tag" style="cursor:pointer">Apply Now →</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- JOIN -->
+<div class="join-section" id="join">
+  <div class="join-left">
+    <div class="join-eyebrow">Open to all Svyasa Students</div>
+    <div class="join-title">Ready to go<br><em>on-chain?</em></div>
+    <p class="join-desc">No prior experience needed. Whether you're a developer, designer, or curious student — there's a role for you in the decentralised future.</p>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSeKzpw3erJaxMzkOamCClYN4jg3ymLApZ6XcmMKGtS0BJVxZw/viewform" class="btn-join">Apply Now →</a>
+  </div>
+  <div class="join-right">
+    <div class="join-item reveal"><div class="join-icon">🔗</div><div><div class="join-item-title">Monthly Workshops</div><div class="join-item-desc">Hands-on sessions on Solidity, Web3 tools, DeFi protocols every week.</div></div></div>
+    <div class="join-item reveal"><div class="join-icon">⚡</div><div><div class="join-item-title">Hackathons & Buildathons</div><div class="join-item-desc">Build real projects, win prizes, and grow your Web3 portfolio.</div></div></div>
+    <div class="join-item reveal"><div class="join-icon">🌐</div><div><div class="join-item-title">Industry Network</div><div class="join-item-desc">Connect with Web3 professionals and founders across India and beyond.</div></div></div>
+    <div class="join-item reveal"><div class="join-icon">📜</div><div><div class="join-item-title">Research & Publication</div><div class="join-item-desc">Co-author papers and contribute to open-source blockchain projects.</div></div></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <div class="footer-logo"><div class="footer-logo-mark">S</div>Svyasa</div>
+    <div class="footer-sub">Blockchain Club · Svyasa University, Bengaluru</div>
+    <div class="footer-sub" style="margin-top:4px"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d7b5bbb8b4bcb4bfb6beb997a4a1aeb6a4b6f9b2b3a2f9beb9">[email&#160;protected]</a></div>
+  </div>
+  <ul class="footer-links">
+    <li><a href="https://x.com/Svyasa_web3">Twitter</a></li><li><a href="https://discord.gg/FF68NT9f">Discord</a></li>
+    <li><a href="https://github.com/svyasaweb3">GitHub</a></li><li><a href="#">LinkedIn</a></li>
+    <li><a href="https://www.instagram.com/svyasa_web3?igsh=a2ZkNXF3cjE2NjM5">Instagram</a></li>
+  </ul>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ═══ CURTAIN REVEAL JS ═══
+function spawnParticles(containerId, count) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'c-particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (4 + Math.random() * 8) + 's';
+    p.style.animationDelay = (Math.random() * 6) + 's';
+    p.style.width = p.style.height = (1 + Math.random() * 3) + 'px';
+    p.style.opacity = 0.3 + Math.random() * 0.7;
+    container.appendChild(p);
+  }
+}
+spawnParticles('left-particles', 30);
+spawnParticles('right-particles', 30);
+
+function openCurtains() {
+  const btn = document.getElementById('launchBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="curtain-btn-label">Opening...</span>';
+
+  const left = document.querySelector('.curtain-left');
+  const right = document.querySelector('.curtain-right');
+  const stage = document.getElementById('curtain-stage');
+  const wrapper = document.getElementById('curtain-wrapper');
+
+  // Fade out stage text first
+  stage.style.transition = 'opacity 0.4s ease';
+  stage.style.opacity = '0';
+
+  setTimeout(() => {
+    left.classList.add('open');
+    right.classList.add('open');
+  }, 300);
+
+  // After curtains open, fade out entire wrapper
+  setTimeout(() => {
+    wrapper.classList.add('done');
+  }, 2200);
+
+  // Remove from DOM after transition
+  setTimeout(() => {
+    wrapper.remove();
+    document.body.style.overflow = '';
+  }, 3000);
+}
+
+// Lock scroll while curtain is up
+document.body.style.overflow = 'hidden';
+
+const toggle=document.getElementById('darkToggle'),icon=document.getElementById('toggle-icon');
+if(localStorage.getItem('sbc-theme')==='dark'){document.body.classList.add('dark');icon.textContent='🌙'}
+toggle.addEventListener('click',()=>{
+  document.body.classList.toggle('dark');
+  const d=document.body.classList.contains('dark');
+  icon.textContent=d?'🌙':'☀️';
+  localStorage.setItem('sbc-theme',d?'dark':'light');
+});
+
+const obs=new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*80);obs.unobserve(e.target)}
+  });
+},{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+const hashes=['0x3f2a9b1c','0x9c8d4e7f','0x1b7e2a3d','0x5c4f8e2a','0x7d3b1c9e','0x2e8f4a6b','0xa1c3e5d7','0x4b9f2e8c'];
+const txData=['TXN: 3','GAS: 21k','TXN: 7','GAS: 45k','TXN: 2','GAS: 31k','TXN: 9','GAS: 18k'];
+let html='';
+const arr=[...hashes,...hashes];
+arr.forEach((h,i)=>{
+  if(i>0)html+=`<div class="chain-conn"></div>`;
+  html+=`<div class="chain-block"><div class="chain-box">${txData[i%txData.length]}</div><div class="chain-hash">${h}</div></div>`;
+});
+const cd=document.querySelector('.chain-divider-inner');
+if(cd){cd.innerHTML=html+html;}
+</script>
+</body>
+</html>
